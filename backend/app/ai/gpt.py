@@ -1,9 +1,7 @@
 import json
 import logging
 from pathlib import Path
-from mistralai.client import Mistral
-from mistralai.client.errors import SDKError
-from mistralai.client.models import ResponseFormat
+from mistralai import Mistral, SDKError
 from fastapi import HTTPException
 from app.config import settings
 
@@ -47,7 +45,7 @@ async def _chat(prompt: str, model: str, temperature: float = 0.4, max_tokens: i
             model=model,
             messages=[{"role": "user", "content": prompt}],
             temperature=temperature,
-            response_format=ResponseFormat(type="json_object"),
+            response_format={"type": "json_object"},
             max_tokens=max_tokens,
         )
         return json.loads(response.choices[0].message.content)
