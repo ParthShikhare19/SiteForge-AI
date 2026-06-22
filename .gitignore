@@ -1,0 +1,37 @@
+# ── Claude Code ──────────────────────────────────────────────────────────────
+.claude
+
+# ── Python / Backend ─────────────────────────────────────────────────────────
+backend/.env
+backend/venv/
+backend/__pycache__/
+backend/**/__pycache__/
+backend/**/*.pyc
+backend/**/*.pyo
+backend/.pytest_cache/
+backend/htmlcov/
+backend/.coverage
+backend/*.egg-info/
+backend/dist/
+backend/build/
+
+# ── Uploaded user files ───────────────────────────────────────────────────────
+backend/static/uploads/
+
+# ── Node / Frontend ───────────────────────────────────────────────────────────
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+frontend/.env.local
+frontend/.env.*.local
+
+# ── OS ────────────────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# ── Editor ───────────────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
