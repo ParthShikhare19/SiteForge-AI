@@ -7,3 +7,17 @@ services:
     plan: free
     envVars:
       - fromGroup: siteforge-env
+
+  - type: web
+    name: siteforge-frontend
+    env: docker
+    dockerfilePath: ./frontend/Dockerfile
+    dockerContext: ./frontend
+    plan: free
+    dockerBuildArgs:
+      - name: NEXT_PUBLIC_API_URL
+        fromGroup: siteforge-env
+      - name: NEXT_PUBLIC_GOOGLE_CLIENT_ID
+        fromGroup: siteforge-env
+    envVars:
+      - fromGroup: siteforge-env
