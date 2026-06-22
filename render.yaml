@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: siteforge-backend
+    env: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    plan: free
+    envVars:
+      - fromGroup: siteforge-env
