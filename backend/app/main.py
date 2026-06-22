@@ -18,8 +18,9 @@ from app.api.website import router as website_router
 from app.api.rate_limit import limiter
 import app.models  # ensure all models are registered
 
-# ── Logging (create dir BEFORE adding file sink) ──────────────────────────────
+# ── Dirs must exist before app.mount and log file sink ───────────────────────
 Path("logs").mkdir(exist_ok=True)
+Path("static/uploads").mkdir(parents=True, exist_ok=True)
 logger.remove()
 logger.add(sys.stderr, level="INFO", format="{time:YYYY-MM-DD HH:mm:ss} | {level} | {message}")
 logger.add("logs/app.log", rotation="10 MB", retention="30 days", level="INFO", enqueue=True)
@@ -44,8 +45,6 @@ def _migrate():
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # ── DB tables + migrations (runs after port is bound) ────────────────────
-    Path("static/uploads").mkdir(parents=True, exist_ok=True)
     Base.metadata.create_all(bind=engine)
     _migrate()
     yield
