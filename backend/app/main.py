@@ -1,4 +1,5 @@
 import sys
+from contextlib import asynccontextmanager
 from pathlib import Path
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -23,9 +24,6 @@ logger.remove()
 logger.add(sys.stderr, level="INFO", format="{time:YYYY-MM-DD HH:mm:ss} | {level} | {message}")
 logger.add("logs/app.log", rotation="10 MB", retention="30 days", level="INFO", enqueue=True)
 
-# ── DB tables + migrations ────────────────────────────────────────────────────
-Base.metadata.create_all(bind=engine)
-
 
 def _migrate():
     migrations = [
@@ -44,12 +42,17 @@ def _migrate():
                 logger.warning(f"Migration skipped ({table}.{col}): {exc}")
 
 
-_migrate()
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # ── DB tables + migrations (runs after port is bound) ────────────────────
+    Path("static/uploads").mkdir(parents=True, exist_ok=True)
+    Base.metadata.create_all(bind=engine)
+    _migrate()
+    yield
 
-Path("static/uploads").mkdir(parents=True, exist_ok=True)
 
 # ── App ───────────────────────────────────────────────────────────────────────
-app = FastAPI(title="SiteForge AI API", version="1.0.0")
+app = FastAPI(title="SiteForge AI API", version="1.0.0", lifespan=lifespan)
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
