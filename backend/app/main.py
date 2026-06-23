@@ -79,3 +79,8 @@ def health():
     except Exception as exc:
         logger.error(f"Health check DB failure: {exc}")
         return JSONResponse(status_code=503, content={"status": "degraded", "db": "unreachable"})
+
+
+@app.get("/cors-check")
+def cors_check():
+    return {"allowed_origins": settings.allowed_origins}
