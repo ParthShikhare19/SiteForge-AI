@@ -25,9 +25,14 @@ def _user_or_ip(request: Request) -> str:
 def _make_limiter() -> Limiter:
     if settings.REDIS_URL:
         try:
+            import redis as _redis
+            r = _redis.from_url(settings.REDIS_URL, socket_connect_timeout=3)
+            r.ping()
+            r.close()
             return Limiter(key_func=_user_or_ip, storage_uri=settings.REDIS_URL)
-        except Exception:
-            pass
+        except Exception as exc:
+            import logging
+            logging.warning(f"Redis unreachable, falling back to in-memory rate limiting: {exc}")
     return Limiter(key_func=_user_or_ip)
 
 
