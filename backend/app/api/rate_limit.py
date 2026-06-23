@@ -24,7 +24,10 @@ def _user_or_ip(request: Request) -> str:
 
 def _make_limiter() -> Limiter:
     if settings.REDIS_URL:
-        return Limiter(key_func=_user_or_ip, storage_uri=settings.REDIS_URL)
+        try:
+            return Limiter(key_func=_user_or_ip, storage_uri=settings.REDIS_URL)
+        except Exception:
+            pass
     return Limiter(key_func=_user_or_ip)
 
 
