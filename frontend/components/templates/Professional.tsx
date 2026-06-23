@@ -201,9 +201,13 @@ export default function Professional({ data, businessName }: { data: WebsiteJSON
           </motion.div>
           <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}
             className="space-y-4">
-            {[["Certified Professionals", Shield, "Industry-recognized expertise"], ["Tailored Solutions", Briefcase, "Custom strategies for your needs"],
-              ["Proven Results", TrendingUp, "Track record of measurable success"], ["Dedicated Support", Users, "Always available when you need us"]].map(([label, Icon, desc]) => (
-              <div key={label as string} className="flex items-start gap-4 p-4 rounded-xl border border-gray-200 bg-white hover:shadow-sm transition-all">
+            {(
+              [["Certified Professionals", Shield, "Industry-recognized expertise"],
+               ["Tailored Solutions", Briefcase, "Custom strategies for your needs"],
+               ["Proven Results", TrendingUp, "Track record of measurable success"],
+               ["Dedicated Support", Users, "Always available when you need us"]] as [string, React.ComponentType<{ className?: string; style?: React.CSSProperties }>, string][]
+            ).map(([label, Icon, desc]) => (
+              <div key={label} className="flex items-start gap-4 p-4 rounded-xl border border-gray-200 bg-white hover:shadow-sm transition-all">
                 <div className="w-10 h-10 flex-shrink-0 rounded-lg flex items-center justify-center" style={{ backgroundColor: `${accent}15` }}>
                   <Icon className="w-5 h-5" style={{ color: accent }} />
                 </div>

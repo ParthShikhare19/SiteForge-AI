@@ -204,10 +204,12 @@ export default function Services({ data, businessName }: { data: WebsiteJSON; bu
           </motion.div>
           <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}
             className="grid grid-cols-2 gap-4">
-            {[["Licensed & Insured", Shield, primary], ["Fast Response", Zap, accent],
-              ["Quality Guaranteed", ThumbsUp, primary], ["Expert Team", CheckCircle, accent]].map(([label, Icon, color]) => (
-              <div key={label as string} className="p-6 rounded-xl border border-gray-200 bg-white hover:shadow-sm transition-all text-center">
-                <Icon className="w-7 h-7 mx-auto mb-3" style={{ color: color as string }} />
+            {(
+              [["Licensed & Insured", Shield, primary], ["Fast Response", Zap, accent],
+               ["Quality Guaranteed", ThumbsUp, primary], ["Expert Team", CheckCircle, accent]] as [string, React.ComponentType<{ className?: string; style?: React.CSSProperties }>, string][]
+            ).map(([label, Icon, color]) => (
+              <div key={label} className="p-6 rounded-xl border border-gray-200 bg-white hover:shadow-sm transition-all text-center">
+                <Icon className="w-7 h-7 mx-auto mb-3" style={{ color }} />
                 <p className="font-bold text-sm text-gray-900">{label}</p>
               </div>
             ))}

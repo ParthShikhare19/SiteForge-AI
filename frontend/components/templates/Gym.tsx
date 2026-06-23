@@ -198,8 +198,10 @@ export default function Gym({ data, businessName }: { data: WebsiteJSON; busines
           </motion.div>
           <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}
             className="grid grid-cols-2 gap-3">
-            {[["Expert Trainers", Trophy], ["Modern Equipment", Dumbbell], ["Nutrition Guidance", Flame], ["Progress Tracking", Zap]].map(([label, Icon]) => (
-              <div key={label as string} className="border border-gray-800 p-6 flex flex-col items-center text-center gap-3">
+            {(
+              [["Expert Trainers", Trophy], ["Modern Equipment", Dumbbell], ["Nutrition Guidance", Flame], ["Progress Tracking", Zap]] as [string, React.ComponentType<{ className?: string; style?: React.CSSProperties }>][]
+            ).map(([label, Icon]) => (
+              <div key={label} className="border border-gray-800 p-6 flex flex-col items-center text-center gap-3">
                 <div className="w-12 h-12 flex items-center justify-center" style={{ backgroundColor: `${accent}15` }}>
                   <Icon className="w-6 h-6" style={{ color: accent }} />
                 </div>

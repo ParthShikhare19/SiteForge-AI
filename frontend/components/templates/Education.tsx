@@ -218,11 +218,13 @@ export default function Education({ data, businessName }: { data: WebsiteJSON; b
           </motion.div>
           <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}
             className="grid grid-cols-2 gap-4">
-            {[["Experienced Faculty", Award, "Industry experts teach every course"],
-              ["Interactive Classes", Users, "Learn with peers in live sessions"],
-              ["Career Support", GraduationCap, "Placement assistance included"],
-              ["Flexible Schedule", BookOpen, "Learn at your own pace online"]].map(([label, Icon, desc]) => (
-              <div key={label as string} className="p-5 rounded-2xl border border-gray-100 hover:border-purple-200 hover:shadow-sm transition-all">
+            {(
+              [["Experienced Faculty", Award, "Industry experts teach every course"],
+               ["Interactive Classes", Users, "Learn with peers in live sessions"],
+               ["Career Support", GraduationCap, "Placement assistance included"],
+               ["Flexible Schedule", BookOpen, "Learn at your own pace online"]] as [string, React.ComponentType<{ className?: string; style?: React.CSSProperties }>, string][]
+            ).map(([label, Icon, desc]) => (
+              <div key={label} className="p-5 rounded-2xl border border-gray-100 hover:border-purple-200 hover:shadow-sm transition-all">
                 <Icon className="w-6 h-6 mb-3" style={{ color: primary }} />
                 <p className="font-bold text-sm text-gray-900 mb-1">{label}</p>
                 <p className="text-xs text-gray-500">{desc}</p>
