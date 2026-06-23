@@ -2,6 +2,14 @@ import { notFound } from "next/navigation";
 import RetailStore from "@/components/templates/RetailStore";
 import Restaurant from "@/components/templates/Restaurant";
 import Bakery from "@/components/templates/Bakery";
+import Clinic from "@/components/templates/Clinic";
+import Hotel from "@/components/templates/Hotel";
+import Salon from "@/components/templates/Salon";
+import Gym from "@/components/templates/Gym";
+import Cafe from "@/components/templates/Cafe";
+import Professional from "@/components/templates/Professional";
+import Education from "@/components/templates/Education";
+import Services from "@/components/templates/Services";
 import TrackVisit from "./TrackVisit";
 import type { PublicWebsite } from "@/types";
 
@@ -24,13 +32,22 @@ export default async function SitePage({ params }: { params: Promise<{ slug: str
   if (!site) return notFound();
 
   const props = { data: site.website_json, businessName: site.business.name };
+  const tid = site.template_id;
 
   return (
     <>
       <TrackVisit slug={slug} />
-      {site.template_id === "restaurant" ? <Restaurant {...props} /> :
-       site.template_id === "bakery" ? <Bakery {...props} /> :
-       <RetailStore {...props} />}
+      {tid === "restaurant"   ? <Restaurant   {...props} /> :
+       tid === "bakery"       ? <Bakery        {...props} /> :
+       tid === "clinic"       ? <Clinic        {...props} /> :
+       tid === "hotel"        ? <Hotel         {...props} /> :
+       tid === "salon"        ? <Salon         {...props} /> :
+       tid === "gym"          ? <Gym           {...props} /> :
+       tid === "cafe"         ? <Cafe          {...props} /> :
+       tid === "professional" ? <Professional  {...props} /> :
+       tid === "education"    ? <Education     {...props} /> :
+       tid === "services"     ? <Services      {...props} /> :
+                                <RetailStore   {...props} />}
     </>
   );
 }
