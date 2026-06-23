@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Mic, Type, Loader2, Globe, CheckCircle2, Sparkles } from "lucide-react";
@@ -9,6 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import VoiceRecorder from "@/components/VoiceRecorder";
 import { transcribeAudio, transcribeText } from "@/services/businessService";
 import { generateWebsite } from "@/services/websiteService";
+import { isAuthenticated } from "@/lib/auth";
 import type { Business } from "@/types";
 
 type Step = "input" | "processing" | "review" | "generating" | "done";
@@ -16,6 +17,16 @@ type Mode = "voice" | "text";
 
 export default function CreateBusinessPage() {
   const router = useRouter();
+
+  useEffect(() => {
+    if (!isAuthenticated()) { router.replace("/login"); return; }
+    const onPageShow = (e: PageTransitionEvent) => {
+      if (e.persisted && !isAuthenticated()) router.replace("/login");
+    };
+    window.addEventListener("pageshow", onPageShow);
+    return () => window.removeEventListener("pageshow", onPageShow);
+  }, [router]);
+
   const [mode, setMode] = useState<Mode>("voice");
   const [step, setStep] = useState<Step>("input");
   const [textInput, setTextInput] = useState("");

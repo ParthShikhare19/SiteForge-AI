@@ -193,17 +193,25 @@ function EditorContent() {
   const [mobilePreview, setMobilePreview] = useState(false);
 
   useEffect(() => {
-    if (!isAuthenticated()) { router.push("/login"); return; }
-    if (!businessId) { router.push("/dashboard"); return; }
+    if (!isAuthenticated()) { router.replace("/login"); return; }
+
+    const onPageShow = (e: PageTransitionEvent) => {
+      if (e.persisted && !isAuthenticated()) router.replace("/login");
+    };
+    window.addEventListener("pageshow", onPageShow);
+
+    if (!businessId) { router.replace("/dashboard"); return; }
     Promise.all([
       listBusinesses(),
       getMyWebsite(businessId),
     ]).then(([list, site]) => {
       const b = list.find(x => x.id === businessId);
-      if (!b) { router.push("/dashboard"); return; }
+      if (!b) { router.replace("/dashboard"); return; }
       setBusiness(b);
       if (site) setWebsite(site);
     }).finally(() => setLoading(false));
+
+    return () => window.removeEventListener("pageshow", onPageShow);
   }, [businessId, router]);
 
   const wj = website?.website_json as WebsiteJSON | undefined;

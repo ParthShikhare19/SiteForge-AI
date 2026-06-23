@@ -169,15 +169,27 @@ export default function DashboardPage() {
   const [siteCache, setSiteCache] = useState<Map<number, DetailedAnalytics>>(new Map());
   const [analyticsLoading, setAnalyticsLoading] = useState(false);
 
+  // Guard: redirect unauthenticated users, including BFCache page restores
+  useEffect(() => {
+    if (!isAuthenticated()) { router.replace("/login"); return; }
+
+    // Fires when the browser restores this page from BFCache (back button after logout)
+    const onPageShow = (e: PageTransitionEvent) => {
+      if (e.persisted && !isAuthenticated()) router.replace("/login");
+    };
+    window.addEventListener("pageshow", onPageShow);
+    return () => window.removeEventListener("pageshow", onPageShow);
+  }, [router]);
+
   // Fetch businesses + overview analytics in parallel on mount
   useEffect(() => {
-    if (!isAuthenticated()) { router.push("/login"); return; }
+    if (!isAuthenticated()) return;
     Promise.all([listBusinesses(), getOverviewAnalytics()])
       .then(([biz, overview]) => {
         setBusinesses(biz);
         setOverviewData(overview);
       })
-      .catch(() => router.push("/login"))
+      .catch(() => router.replace("/login"))
       .finally(() => setLoading(false));
   }, [router]);
 
@@ -195,7 +207,7 @@ export default function DashboardPage() {
 
   function handleLogout() {
     logout();
-    router.push("/login");
+    router.replace("/login");
   }
 
   if (loading) {
